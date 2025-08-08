@@ -1,0 +1,29 @@
+name: base
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - nodefaults
+dependencies:
+  # General packages
+  - pip=22.2
+  - python=3.9
+  - setuptools=63.2.0
+  - tqdm=4.64.0
+  # Scientific computing
+  - ipykernel=6.15.1
+  - numba=0.53.1
+  - numpy=1.20.3
+  - pandas=1.4.3
+  - pip:
+    - git+https://github.com/evfro/polara.git@v.0.7.2
+    - git+https://github.com/geoopt/geoopt.git@v0.5.0
+    - git+https://github.com/leymir/hyperbolic-image-embeddings.git@6633edb
+  - optuna=2.10.1
+  - requests=2.28.1
+  - scikit-learn=1.1.1
+  - scipy=1.8.1
+  - seaborn=0.11.2
+  # PyTorch
+  - pytorch=2.3.0
+  - pytorch-cuda=12.1
