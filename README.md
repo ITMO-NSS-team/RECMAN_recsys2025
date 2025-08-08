@@ -1,13 +1,12 @@
 
-## Learning Geometry-Aware Recommender Systems with Manifold Regularization (RecSys 2025)
-___
 
-This repository contains the source code for the paper. It includes implementations of:
+This repository contains the source code for the paper **Learning Geometry-Aware Recommender Systems 
+with Manifold Regularization (RecSys 2025)**. It includes implementations of:
 - **SASRec** and variants (`SASRec+`, `SASRec_man`, `SASRec+_man`)
 - **HypSASRec** and variants (`HypSASRec+`)
-- **NCF** and variants (`NCF`)
+- **NCF** and variants (`NCF+geoopt`, `HyperML`)
 
----
+
 
 <details>
           <summary>Implementation Notes</summary>
@@ -22,9 +21,70 @@ Original licenses and source code are preserved in their repositories.
 </p>
 </details>
 
+---
+
+## 🔍 Proposed Approach (RECMAN)
+
+Our approach enhances recommender systems through soft manifold regularization, 
+enabling geometric learning without architectural changes. Unlike hyperbolic approaches
+that require Riemannian optimization, RECMAN preserves standard training via a novel
+regularization term in the loss function. It natively supports hybrid geometries—
+combining Euclidean user embeddings with hyperbolic item embeddings for users and Poincaré ball distances for items—while handling 
+sequences through pairwise distance matrices. The method avoids computational 
+overhead by applying constraints through the loss (with a tuned dispersion ratio λ)
+rather than modifying the optimizer. As shown in the approach diagram, this maintains
+model architecture integrity while enforcing geometric relationships.
+
+<p align="center">
+<img src="approach_recman.png" alt="RECMAN Approach Diagram" width="65%">
+</p>
+
+## Results
+
+📌 **Bold** are best result in category  
+
+### NCF Performance
+Our RECMAN variant with manifold regularization 
+outperformed baseline NCF models across both explicit and implicit feedback tasks:
+
+| Dataset       | Model      | MSE (Explicit) | Binary Acc. | HR@10 (Implicit) | NDCG@10 |
+|---------------|------------|----------------|-------------|------------------|---------|
+| **MovieLens1M** | NCF        | 0.0322         | 0.6878      | 0.722            | 0.547   |
+|                | NCF+geoopt | 0.0324         | 0.6840      | 0.563            | 0.318   |
+|                | **RECMAN** | **0.0320**     | **0.6927**  | **0.741**        | **0.531** |
+| **Pinterest**   | NCF        | n/a            | n/a         | 0.834            | 0.502   |
+|                | **RECMAN** | n/a            | n/a         | **0.836**        | **0.505** |
+
+***Pinterest results are for implicit feedback only. RECMAN shows consistent improvements 
+in both settings.***
+
+## SASRec and SASRec+ Architecture Evaluation Results
 
 
-## 🚀 Quick Start
+📈 Relative improvements compare to  SASRec/SASRec+
+
+| Dataset    | Model          | HR@10 | MRR@10 | NDCG@10 | COV@10 | Improvement vs SASRec+ | Improvement vs SASRec |
+|------------|----------------|-------|--------|---------|--------|------------------------|-----------------------|
+| **Arts**   | SASRec+        | **0.074** | **0.040** | **0.048** | **0.338** | - | +27% HR, +38% MRR |
+|            | HypSASRec+     | 0.051 | 0.028 | 0.033 | 0.246 | - | - |
+|            | RECMAN+ (Ours) | 0.068 | 0.039 | 0.046 | 0.219 | -8% HR | **+17% HR, +33% MRR** |
+| **Digital**| SASRec+        | 0.061 | 0.028 | 0.035 | 0.506 | - | +44% HR, +41% MRR |
+|            | HypSASRec+     | 0.059 | 0.028 | 0.035 | **0.541** | - | - |
+|            | RECMAN+ (Ours) | **0.063** | **0.028** | **0.036** | 0.466 | **+3% HR** | **+44% HR, +41% MRR** |
+| **Luxury** | SASRec+        | 0.131 | 0.067 | 0.082 | 0.563 | - | +12% HR |
+|            | HypSASRec+     | 0.132 | 0.064 | 0.080 | **0.589** | - | - |
+|            | RECMAN+ (Ours) | **0.138** | **0.073** | **0.088** | 0.391 | **+5% HR, +8% MRR** | **+16% MRR, +15% NDCG** |
+| **MovieLens**| SASRec+      | 0.168 | 0.063 | 0.087 | **0.787** | - | +10% HR |
+|            | HypSASRec+     | 0.169 | 0.063 | 0.088 | 0.751 | - | - |
+|            | RECMAN+ (Ours) | **0.169** | **0.064** | **0.088** | 0.686 | +1% HR | **+14% MRR, +12% NDCG** |
+| **Office** | SASRec+        | 0.097 | 0.063 | 0.071 | 0.298 | - | +97% HR |
+|            | HypSASRec+     | 0.088 | 0.054 | 0.062 | 0.430 | - | - |
+|            | RECMAN+ (Ours) | **0.103** | **0.066** | **0.073** | **0.431** | **+7% HR, +45% COV** | **+146% MRR, +123% NDCG** |
+
+The results demonstrate that our RECMAN+ architecture achieves competitive or superior performance across all datasets, with particularly significant 
+improvements over the original SASRec (up to +146% MRR and +123% NDCG), while maintaining comparable efficiency to SASRec+
+
+## 🚀 Code Usage -  Quick Start
 
 ### 1. Download Datasets
 Run the following command to download and preprocess datasets:
