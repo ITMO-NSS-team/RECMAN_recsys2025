@@ -86,6 +86,10 @@ improvements over the original SASRec (up to +146% MRR and +123% NDCG), while ma
 
 ## 🚀 Code Usage -  Quick Start
 
+### SASRec/SASRec+
+
+---
+
 ### 1. Download Datasets
 Run the following command to download and preprocess datasets:
 
@@ -157,6 +161,57 @@ python test.py --model %model% --dataset %dataset_name% --time_offset 0.95 \
 | `Office_Products_5`               | `office`                  |
 | `Luxury_Beauty_5`                 | `lux`                     |
 
+---
+### NCF
+
+---
+### Setup
+1. Download datasets from the original NCF repository: 
+
+```bash
+   git clone https://github.com/hexiangnan/neural_collaborative_filtering
+```
+
+### Configuration
+
+Edit ```config.py``` to specify:
+
+```python
+dataset = 'ml-1m'  # or 'pinterest-20'
+model = 'MLP'      # Options: 'MLP' | 'GMF' | 'NeuMF-pre'
+```
+
+### Running Experiments
+Run each model with optimal manifold regularization values:
+
+| Model       | Command                          | λ Value  |
+|-------------|----------------------------------|----------|
+| **MLP**     | `python main.py --lambda_man 1e-6` | `1e-6`   |
+| **GMF**     | `python main.py --lambda_man 0`    | `0`      |
+| **NeuMF-pre** | `python main.py --lambda_man 1e-6` | `1e-6`   |
+
+
+## Execution Order
+
+```bash
+# 1. MLP
+sed -i "s/model = .*/model = 'MLP'/" config.py
+python main.py --lambda_man 1e-6
+
+# 2. GMF 
+sed -i "s/model = .*/model = 'GMF'/" config.py
+python main.py --lambda_man 0
+
+# 3. NeuMF-pre
+sed -i "s/model = .*/model = 'NeuMF-pre'/" config.py
+python main.py --lambda_man 1e-6
+```
+
+## Notes
+
+- For `pinterest-20`, ensure the dataset files are in `Data/pinterest-20/`;
+
+- λ values were determined through grid search (see paper for details).
 
 
 ## Citation
