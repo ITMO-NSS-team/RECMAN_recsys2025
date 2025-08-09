@@ -129,6 +129,12 @@ if config.model == 'NeuMF-pre':
 else:
 	optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
+
+if config.dataset == 'ml-1m':
+	dataset_curvature = c_ml1m
+elif config.dataset == 'pinterest-20':
+	dataset_curvature = c_pin
+
 # writer = SummaryWriter() # for visualization
 
 ########################### TRAINING #####################################
@@ -153,11 +159,11 @@ for epoch in range(args.epochs):
             
 		 user_emb = model.embed_user_GMF(user)
 
-		 dist_u = hyperbolic_dist(user_emb.unsqueeze(1), user_emb.unsqueeze(1), c=c_pin)
+		 dist_u = hyperbolic_dist(user_emb.unsqueeze(1), user_emb.unsqueeze(1), c=dataset_curvature)
 
 		 item_emb = model.embed_item_GMF(item)
 
-		 dist_i = hyperbolic_dist(item_emb.unsqueeze(1), item_emb.unsqueeze(1), c=c_pin)
+		 dist_i = hyperbolic_dist(item_emb.unsqueeze(1), item_emb.unsqueeze(1), c=dataset_curvature)
 
 
 		 distsq = dist_u**2 + dist_i**2#dist=torch.sqrt(dist_u**2 + dist_i**2)
