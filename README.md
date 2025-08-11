@@ -49,9 +49,9 @@ outperformed baseline NCF models across both explicit and implicit feedback task
 
 | Dataset       | Model      | MSE (Explicit) | Binary Acc. | HR@10 (Implicit) | NDCG@10 |
 |---------------|------------|----------------|-------------|------------------|---------|
-| **MovieLens1M** | NCF        | 0.0322         | 0.6878      | 0.722            | 0.547   |
+| **MovieLens1M** | NCF        | 0.0322         | 0.6878      | 0.722            | **0.547**   |
 |                | NCF+geoopt | 0.0324         | 0.6840      | 0.563            | 0.318   |
-|                | **RECMAN** | **0.0320**     | **0.6927**  | **0.741**        | **0.531** |
+|                | **RECMAN** | **0.0320**     | **0.6927**  | **0.741**        | 0.531 |
 | **Pinterest**   | NCF        | n/a            | n/a         | 0.834            | 0.502   |
 |                | **RECMAN** | n/a            | n/a         | **0.836**        | **0.505** |
 
